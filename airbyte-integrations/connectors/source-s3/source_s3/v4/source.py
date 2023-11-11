@@ -27,6 +27,8 @@ class SourceS3(FileBasedSource):
         validate the config against the new spec.
         """
         config = super().read_config(config_path)
+        if config.get("format", {}).get("delimiter") == r"\t":
+            config["format"]["delimiter"] = "\t"
         if not self._is_v4_config(config):
             parsed_legacy_config = SourceS3Spec(**config)
             converted_config = LegacyConfigTransformer.convert(parsed_legacy_config)
